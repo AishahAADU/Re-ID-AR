@@ -12,7 +12,7 @@ we used the fast the faster implementation provided by Qidian213 (https://github
 can be downloaded from: https://collections.durham.ac.uk/files/r18c97kq420#.YZ-1m7unzJU. 
 
 # BibTeX
-@article{alsehaim2021re,
+> @article{alsehaim2021re,
   title={Re-ID-AR: Improved Person Re-identification in Video via Joint Weakly Supervised Action Recognition},
   author={Alsehaim, Aishah and Breckon, Toby P},
   year={2021},
