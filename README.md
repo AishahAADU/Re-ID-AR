@@ -1,5 +1,7 @@
-# ReID-AR
+# Re-ID-AR: Improved Person Re-identification in Video via Joint Weakly Supervised Action Recognition
 This is an Official Pytorch Implementation of our paper: Re-ID-AR: Improved Person Re-identification in Video via Joint Weakly Supervised Action Recognition.
+
+[![Build Status](https://travis-ci.org/{ORG-or-USERNAME}/{REPO-NAME}.png?branch=master)](https://travis-ci.org/{ORG-or-USERNAME}/{REPO-NAME})
 
 # Prepare dataset:
 1. Download MARS dataset from: http://zheng-lab.cecs.anu.edu.au/Project/project_mars.html . 
