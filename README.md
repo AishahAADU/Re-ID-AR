@@ -40,11 +40,10 @@ MARS and LPW Re-ID datasets."
 1. Download MARS dataset from [here](http://zheng-lab.cecs.anu.edu.au/Project/project_mars.html) . 
 2. Download LPW dataset from [here](https://liuyu.us/dataset/lpw/index.html).
 
-## Prepare pretrained Resnet base model:
-we used the faster implementation provided by [Qidian213] (https://github.com/Qidian213), which can be downloaded from [here](https://drive.google.com/file/d/13lprTFafpXORqs7XXMLYaelbtw6NxQM1/view) .
-
-## Action annotation :
-can be downloaded from: https://collections.durham.ac.uk/files/r18c97kq420#.YZ-1m7unzJU. 
+## Train and Test R2-ID_AR:
+1. We used the faster implementation provided by [Qidian213](https://github.com/Qidian213) as a pre-train model for our Resnet backbone, which can be downloaded from [here](https://drive.google.com/file/d/13lprTFafpXORqs7XXMLYaelbtw6NxQM1/view) .
+2. Action annotation can be downloaded from [here](https://collections.durham.ac.uk/files/r18c97kq420#.YZ-1m7unzJU). 
+3. 
 
 ## Cite
 ```
