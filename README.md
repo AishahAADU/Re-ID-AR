@@ -43,7 +43,6 @@ MARS and LPW Re-ID datasets."
 ## Train and Test R2-ID_AR:
 1. We used the faster implementation provided by [Qidian213](https://github.com/Qidian213) as a pre-train model for our Resnet backbone, which can be downloaded from [here](https://drive.google.com/file/d/13lprTFafpXORqs7XXMLYaelbtw6NxQM1/view) .
 2. Action annotation can be downloaded from [here](https://collections.durham.ac.uk/files/r18c97kq420#.YZ-1m7unzJU). 
-3. 
 
 ## Cite
 ```
