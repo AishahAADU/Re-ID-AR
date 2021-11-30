@@ -30,10 +30,15 @@ work. Our work represents the first benchmark performance for such a joint Re-ID
 action recognition video understanding task, hitherto unapproached in the literature, and
 is accompanied by a new public dataset of supplementary action labels for the seminal
 MARS and LPW Re-ID datasets."
+# Installation:
+- Python 3.7
+- Pytorch 1.8.0
+- cv2
+
 
 # Prepare dataset:
-1. Download MARS dataset from: http://zheng-lab.cecs.anu.edu.au/Project/project_mars.html . 
-2. Download LPW dataset from: https://liuyu.us/dataset/lpw/index.html .
+1. Download MARS dataset from [here](http://zheng-lab.cecs.anu.edu.au/Project/project_mars.html) . 
+2. Download LPW dataset from [here](https://liuyu.us/dataset/lpw/index.html).
 
 # Prepare pretrained Resnet base model:
 we used the fast the faster implementation provided by Qidian213 (https://github.com/Qidian213), which can be downloaded from: https://drive.google.com/file/d/13lprTFafpXORqs7XXMLYaelbtw6NxQM1/view.
