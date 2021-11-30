@@ -1,9 +1,7 @@
 # Re-ID-AR: Improved Person Re-identification in Video via Joint Weakly Supervised Action Recognition
 This is an Official Pytorch Implementation of our paper: Re-ID-AR: Improved Person Re-identification in Video via Joint Weakly Supervised Action Recognition.
 
-[![Python 3.6](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)  
-![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)
-Tested using Python 3.7.x,torch: 1.8.0.
+[![Python 3.6](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/) Tested using Python 3.7.x and Torch: 1.8.0.
 
 # Architectur:
 <img width="811" alt="paper2Dig" src="https://user-images.githubusercontent.com/92983150/144039860-49fbe999-fcbd-48f1-b5d2-c174190b76a9.png">
