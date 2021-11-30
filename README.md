@@ -30,7 +30,7 @@ work. Our work represents the first benchmark performance for such a joint Re-ID
 action recognition video understanding task, hitherto unapproached in the literature, and
 is accompanied by a new public dataset of supplementary action labels for the seminal
 MARS and LPW Re-ID datasets."
-# Installation:
+## Installation:
 - Python 3.7
 - Pytorch 1.8.0
 - cv2
