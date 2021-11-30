@@ -3,10 +3,10 @@ This is an Official Pytorch Implementation of our paper: Re-ID-AR: Improved Pers
 
 [![Python 3.6](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/) Tested using Python 3.7.x and Torch: 1.8.0.
 
-# Architectur:
+## Architectur:
 <img width="811" alt="paper2Dig" src="https://user-images.githubusercontent.com/92983150/144039860-49fbe999-fcbd-48f1-b5d2-c174190b76a9.png">
 
-# Abstract:
+## Abstract:
 "We uniquely consider the task of joint person re-identification (Re-ID) and action
 recognition in video as a multi-task problem. In addition to the broader potential of joint
 Re-ID and action recognition within the context of automated multi-camera surveillance,
@@ -36,17 +36,17 @@ MARS and LPW Re-ID datasets."
 - cv2
 
 
-# Prepare dataset:
+## Prepare dataset:
 1. Download MARS dataset from [here](http://zheng-lab.cecs.anu.edu.au/Project/project_mars.html) . 
 2. Download LPW dataset from [here](https://liuyu.us/dataset/lpw/index.html).
 
-# Prepare pretrained Resnet base model:
-we used the fast the faster implementation provided by Qidian213 (https://github.com/Qidian213), which can be downloaded from: https://drive.google.com/file/d/13lprTFafpXORqs7XXMLYaelbtw6NxQM1/view.
+## Prepare pretrained Resnet base model:
+we used the faster implementation provided by [Qidian213] (https://github.com/Qidian213), which can be downloaded from [here](https://drive.google.com/file/d/13lprTFafpXORqs7XXMLYaelbtw6NxQM1/view) .
 
-# Action annotation :
+## Action annotation :
 can be downloaded from: https://collections.durham.ac.uk/files/r18c97kq420#.YZ-1m7unzJU. 
 
-# Cite
+## Cite
 ```
  @article{alsehaim2021re,
   title={Re-ID-AR: Improved Person Re-identification in Video via Joint Weakly Supervised Action Recognition},
