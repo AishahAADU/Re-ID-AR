@@ -30,27 +30,41 @@ work. Our work represents the first benchmark performance for such a joint Re-ID
 action recognition video understanding task, hitherto unapproached in the literature, and
 is accompanied by a new public dataset of supplementary action labels for the seminal
 MARS and LPW Re-ID datasets."
-## Installation:
-- Python 3.7
-- Pytorch 1.8.0
-- cv2
+
+[[A. Alsehaim, T.P. Breckon, In Proc. British Machine Vision Conference, BMVA, 2021]](https://breckon.org/toby/publications/papers/alsehaim21reidar.pdf)
 
 
-## Prepare dataset:
+## Requirements
+```
+pip install -r requirements.txt
+```
+## Getting Started
+
+
+### Prepare dataset:
 1. Download MARS dataset from [here](http://zheng-lab.cecs.anu.edu.au/Project/project_mars.html) . 
 2. Download LPW dataset from [here](https://liuyu.us/dataset/lpw/index.html).
 
-## Train and Test R2-ID_AR:
-1. We used the faster implementation provided by [Qidian213](https://github.com/Qidian213) as a pre-train model for our Resnet backbone, which can be downloaded from [here](https://drive.google.com/file/d/13lprTFafpXORqs7XXMLYaelbtw6NxQM1/view) .
-2. Action annotation can be downloaded from [here](https://collections.durham.ac.uk/files/r18c97kq420#.YZ-1m7unzJU). 
+### Train and Test Re-ID_AR:
+1. Download a pre-train model for Resnet backbone from [here](https://drive.google.com/file/d/13lprTFafpXORqs7XXMLYaelbtw6NxQM1/view).
+2. Download action annotation from [here](https://collections.durham.ac.uk/files/r18c97kq420#.YZ-1m7unzJU). 
+
+
+## Acknowledgement
+Thanks to [Qidian213](https://github.com/Qidian213), using some implementation from his repository.
 
 ## Cite
 ```
- @article{alsehaim2021re,
-  title={Re-ID-AR: Improved Person Re-identification in Video via Joint Weakly Supervised Action Recognition},
-  author={Alsehaim, Aishah and Breckon, Toby P},
-  year={2021},
-  publisher={BMVA}
+ @inproceedings{alsehaim21reidar,
+ author = {Alsehaim, A. and Breckon, T.P.},
+ title = {Re-ID-AR: Improved Person Re-identification in Video via Joint Weakly Supervised Action Recognition},
+ booktitle = {Proc. British Machine Vision Conference},
+ year = {2021},
+ month = {November},
+ publisher = {BMVA},
+ keywords = {re-id, multi-camera, person reidentification, camera-to-camera tracking, action recognition, weak labels, multi-class, cnn, deep learning},
+ url = {https://breckon.org/toby/publications/papers/alsehaim21reidar.pdf},
+ category = {surveillance},
 }
 ```
 
