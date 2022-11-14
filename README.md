@@ -49,10 +49,29 @@ pip install -r requirements.txt
 1. Download a pre-train model for Resnet backbone from [here](https://drive.google.com/file/d/13lprTFafpXORqs7XXMLYaelbtw6NxQM1/view).
 2. Download action annotation from [here](https://collections.durham.ac.uk/files/r18c97kq420#.YZ-1m7unzJU). 
 ### 
-Train and evaluate the model on MARS dataset
-'''
-python3 -u  main.py --Dataset_name 'MARS'  --Net_path 'resnet50_ibn_a.pth.tar'  --action_num 3  --train_file 'train_action_moreaction_ncc_3Action_arrangelabel.txt' --test_file 'Test_action_moreaction_3action_ncc_arrangeLabel.txt' --save_path 'Re-ID-AR'
-'''
+Train and evaluate the model on MARS dataset using Three actions:
+```
+python3 -u  main.py --Dataset_name 'MARS'  --Net_path 'resnet50_ibn_a.pth.tar'  --action_num 3  --train_file 'train_3_action.txt' --test_file 'test_3_action.txt' --save_path 'Re-ID-AR'
+```
+
+Train and evaluate the model on MARS dataset using Five actions:
+```
+python3 -u  main.py --Dataset_name 'MARS'  --Net_path 'resnet50_ibn_a.pth.tar'  --action_num 5  --train_file 'train_5_action.txt' --test_file 'test_5_action.txt' --save_path 'Re-ID-AR'
+```
+Train and evaluate the model on MARS dataset using Eight actions:
+```
+python3 -u  main.py --Dataset_name 'MARS'  --Net_path 'resnet50_ibn_a.pth.tar'  --action_num 8  --train_file 'train_8_action.txt' --test_file 'test_8_action.txt' --save_path 'Re-ID-AR'
+```
+##
+Train and evaluate the model on LPW dataset using Three actions:
+```
+python3 -u  main.py --Dataset_name 'LPW'  --Net_path 'resnet50_ibn_a.pth.tar'  --action_num 3  --train_file 'train_scene2_3_action.txt' --test_file 'test_gallery_3_action.txt' --test_query 'test_query_3_action.txt' --save_path 'Re-ID-AR'
+```
+
+Train and evaluate the model on LPW dataset using Eight actions:
+```
+python3 -u  main.py --Dataset_name 'LPW'  --Net_path 'resnet50_ibn_a.pth.tar'  --action_num 8  --train_file 'train_scene3_8_action.txt' --test_file 'test_gallery_8_action.txt' --test_query 'test_query_8_action.txt'  --save_path 'Re-ID-AR'
+```
 ## Acknowledgement
 Thanks to [Qidian213](https://github.com/Qidian213), using some implementation from his repository.
 
