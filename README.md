@@ -48,8 +48,11 @@ pip install -r requirements.txt
 ### Train and Test Re-ID_AR:
 1. Download a pre-train model for Resnet backbone from [here](https://drive.google.com/file/d/13lprTFafpXORqs7XXMLYaelbtw6NxQM1/view).
 2. Download action annotation from [here](https://collections.durham.ac.uk/files/r18c97kq420#.YZ-1m7unzJU). 
-
-
+### 
+Train and evaluate the model on MARS dataset
+'''
+python3 -u  main.py --Dataset_name 'MARS'  --Net_path 'resnet50_ibn_a.pth.tar'  --action_num 3  --train_file 'train_action_moreaction_ncc_3Action_arrangelabel.txt' --test_file 'Test_action_moreaction_3action_ncc_arrangeLabel.txt' --save_path 'Re-ID-AR'
+'''
 ## Acknowledgement
 Thanks to [Qidian213](https://github.com/Qidian213), using some implementation from his repository.
 
