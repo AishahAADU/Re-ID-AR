@@ -12,12 +12,14 @@ from torch.utils.data import DataLoader
 from matplotlib import pyplot as plt
 import torchvision.transforms as T
 from MARS_dataset import *
+from LPW_dataset import *
 from scheduler import *
 from loss import *
 from utils import *
 from samplers import *
 from video_loader import *
 from model import Re_ID_AR
+import argparse
 
 def make_optimizer(model):
     params = []
@@ -34,13 +36,13 @@ def make_optimizer(model):
     return optimizer
 
 
-def test(model, queryloader, galleryloader,e=0, pool='avg', use_gpu=True, ranks=[1, 5, 10, 20]):
+def test(model, queryloader, galleryloader,num_action, pool='avg', use_gpu=True, ranks=[1, 5, 10, 20]):
     model.eval()
     qf, q_pids, q_camids = [], [], []
     top1 = AverageMeter()
     top5 = AverageMeter()
-    preds_tensor = np.empty(shape=[0, 3], dtype=np.byte)   # shape = (num_sample, num_Action)
-    labels_tensor = np.empty(shape=[0, 3], dtype=np.byte)   # shape = (num_sample, num_Action)
+    preds_tensor = np.empty(shape=[0, int(num_action)], dtype=np.byte)   # shape = (num_sample, num_Action)
+    labels_tensor = np.empty(shape=[0, int(num_action)], dtype=np.byte)   # shape = (num_sample, num_Action)
     with torch.no_grad():
       all_target = []
       accuracy_list = []
@@ -60,7 +62,8 @@ def test(model, queryloader, galleryloader,e=0, pool='avg', use_gpu=True, ranks=
         labels=a
         
         labels=torch.stack(tuple(labels))
-        labels = to_one_hot(labels, C=3).cuda() #one hot label
+        
+        labels = to_one_hot(labels, C=int(num_action)).cuda() #one hot label
         
         labels = labels.cpu().numpy()
         
@@ -114,7 +117,7 @@ def test(model, queryloader, galleryloader,e=0, pool='avg', use_gpu=True, ranks=
            
         labels=a
         labels=torch.stack(tuple(labels))
-        labels = to_one_hot(labels, C=3).cuda()
+        labels = to_one_hot(labels, C=int(num_action)).cuda()
         
         labels = labels.cpu().numpy()
         preds = torch.gt(action_score, torch.ones_like(action_score)/2)
@@ -234,13 +237,20 @@ def test(model, queryloader, galleryloader,e=0, pool='avg', use_gpu=True, ranks=
     plt.close()
     return cmc[0], mAP
 
+def to_one_hot(x, C=2, tensor_class=torch.FloatTensor):
+    """ One-hot a batched tensor of shape (B, ...) into (B, C, ...) """
+    x_one_hot = tensor_class(x.size(0), C, *x.shape[1:]).zero_()
+    x_one_hot = x_one_hot.scatter_(1, x.unsqueeze(1), 1)
+    return x_one_hot
 
 
+__factory = {
+    'MARS':MARS,
+    'LPW':LPW,
+}
 
 if __name__ == '__main__':
-    
     device = torch.device("cuda" )
-    
     transform_train = T.Compose([
             T.Resize((224, 112), interpolation=3),
             T.RandomHorizontalFlip(p=0.5),
@@ -250,36 +260,59 @@ if __name__ == '__main__':
             T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
             
         ])
-       
-        #RandomErasing(probability=0.5 ,mean=[0.485, 0.456, 0.406])
-    #transforms.Resize((224, 112), interpolation=3),
+           
     transform_test = T.Compose([
        T.Resize((224, 112), interpolation=3),
        T.ToTensor(),
        T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
+    parser = argparse.ArgumentParser(description="Re-ID-AR")
+    parser.add_argument(
+        "--Dataset_name", default="", help="The name of the DataSet", type=str)
+    parser.add_argument(
+        "--Net_path", default="", help="pretrained model", type=str)
 
-    dataset = Mars()
-    
+    parser.add_argument(
+        "--action_num", default="", help="number of action to train the model with", type=str) 
+
+    parser.add_argument(
+        "--train_file", default="", help="train_file", type=str) 
+
+    parser.add_argument(
+        "--test_file", default="", help="test_file", type=str) 
+
+    parser.add_argument(
+        "--save_path", default="", help="model save path", type=str)     
+
+    args = parser.parse_args()
+    Dataset_name=args.Dataset_name
+    pretrainpath=args.Net_path
+    save_path=args.save_path
+
+    action=args.action_num
+    train_file =args.train_file
+    test_file =args.test_file
+
+    dataset = __factory[Dataset_name](train_file,test_file )
     pin_memory = True
 
     trainloader = DataLoader(
     VideoDataset_inderase(dataset.train,dataset.train_action, seq_len=4, sample='intelligent',transform=transform_train,errize=True),
     sampler=RandomIdentitySampler(dataset.train),
-    batch_size=32, num_workers=4,
+    batch_size=64, num_workers=2,
     pin_memory=pin_memory, drop_last=True,
 )
     
     queryloader = DataLoader(
     VideoDataset(dataset.query,dataset.query_action, seq_len=4, sample='dense',transform=transform_test),
-    batch_size=1, num_workers=4,
+    batch_size=1, num_workers=1,
     pin_memory=pin_memory, drop_last=False,
 )
 
     galleryloader = DataLoader(
     VideoDataset(dataset.gallery,dataset.gallery_action, seq_len=4, sample='dense',transform=transform_test),
-    batch_size=1, num_workers=4,
+    batch_size=1, num_workers=1,
     pin_memory=pin_memory, drop_last=False,
 )
     
@@ -298,16 +331,28 @@ if __name__ == '__main__':
     beta = 0.9999
     gamma = 2.0
     #samples_per_cls = [1/794,1/40,1/406]
-    samples_per_cls = [1/1592.0,1/80.0,1/828.0] # Three actions
-    #samples_per_cls = [1/396.0,1/20.0,1/14.0,1/33.0,1/159.0] # Five actions
-    #samples_per_cls = [1/396.0,1/20.0,1/5.0,1/33.0,1/151.0,1/14.0,1/3.0,1/3.0]   # Eight actions
+    if Dataset_name=='MARS':
+        if int(action)==3:
+                 samples_per_cls = [1/1592.0,1/80.0,1/828.0] # Three actions
+        elif int(action)==5:         
+            samples_per_cls = [1/396.0,1/20.0,1/14.0,1/33.0,1/159.0] # Five actions
+        else:    
+            samples_per_cls = [1/396.0,1/20.0,1/5.0,1/33.0,1/151.0,1/14.0,1/3.0,1/3.0]   # Eight actions
+
+    elif Dataset_name=='LPW':
+        if int(action)==3:
+                 samples_per_cls = [1/1145.0,1/1934.0,1/23] # Three actions
+        
+        else:    
+            samples_per_cls = [1/1145.0,1/948.0,1/372.0,1/23.0,1/268.0,1/23,1/88.0,1/14.0]   # Eight actions
+
     
 
     new_wighted=CEL_Sigmoid(np.asarray(samples_per_cls))
 
 
     # The model
-    model = Re_ID_AR(model_name = 'resnet50_ibn_a',num_classes=625,last_stride=1,model_path='resnet50_ibn_a.pth.tar',  pretrain_choice= 'imagenet',Action_class=3,seq_len=4).to(device)
+    model = Re_ID_AR(model_name = 'resnet50_ibn_a',num_classes=625,last_stride=1,model_path=pretrainpath,  pretrain_choice= 'imagenet',Action_class=int(action)).to(device)
     
 
 
@@ -337,10 +382,10 @@ if __name__ == '__main__':
         scheduler.step()
         # test the model
         if ((e+1)%10== 0) :
-             cmc,map = test(model, queryloader, galleryloader,e)
+             cmc,map = test(model, queryloader, galleryloader,int(action))
              print('CMC: %.4f, mAP : %.4f'%(cmc,map))
              if cmc >= best_cmc:
-                torch.save(model.state_dict(),os.path.join("path",'MARS_ckpt_best.pth'))
+                torch.save(model.state_dict(),os.path.join(save_path,'MARS_ckpt_best.pth'))
                 best_cmc = cmc
                
                 
@@ -363,7 +408,8 @@ if __name__ == '__main__':
             
             actions_lable=a
             actions_lable=torch.stack(tuple(actions_lable))
-            actions_lable = to_one_hot(actions_lable, C=3).cuda()
+            
+            actions_lable = to_one_hot(actions_lable, C=int(action)).cuda()
             
             
             classf,feat,a_vals,action_score,f_a,fa_id= model(seqs) 
@@ -393,7 +439,7 @@ if __name__ == '__main__':
            
             
             # comulative loss
-            total_loss =   RE_id_loss+  action_loss#cetner_loss_weight * center+ RLL               #total_loss =action_loss
+            total_loss =   RE_id_loss+  action_loss
             
             optimizer.zero_grad()
             optimizer_center.zero_grad()
@@ -411,12 +457,13 @@ if __name__ == '__main__':
 
         
         print("total_loss",total_loss)
+        avg_Action_loss = '%.4f'%(total_Action/len(trainloader))
         print("action avreg loss:",avg_Action_loss)
         avg_id_loss = '%.4f'%(total_id_loss/len(trainloader))
         avg_RLL_loss = '%.4f'%(total_RLL_loss/len(trainloader))
         avg_track_id_loss = '%.4f'%(total_track_id_loss/len(trainloader))
         print('RLL : %s , ID : %s , Track_ID : %s'%(avg_RLL_loss,avg_id_loss,avg_track_id_loss))
         
-        avg_Action_loss = '%.4f'%(total_Action/len(trainloader))
+        
         
         
