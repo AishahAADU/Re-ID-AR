@@ -281,10 +281,13 @@ if __name__ == '__main__':
 
     parser.add_argument(
         "--test_file", default="", help="test_file", type=str) 
-
+    parser.add_argument(
+        "--test_query", default="None", help="test_file", type=str)
+    
+    
     parser.add_argument(
         "--save_path", default="", help="model save path", type=str)     
-
+    
     args = parser.parse_args()
     Dataset_name=args.Dataset_name
     pretrainpath=args.Net_path
@@ -293,8 +296,11 @@ if __name__ == '__main__':
     action=args.action_num
     train_file =args.train_file
     test_file =args.test_file
-
-    dataset = __factory[Dataset_name](train_file,test_file )
+    test_query=args.test_query
+    
+    if Dataset_name=='MARS': dataset = __factory[Dataset_name](train_file,test_file )
+    else: dataset = __factory[Dataset_name](train_file,test_file, test_query)
+        
     pin_memory = True
 
     trainloader = DataLoader(
