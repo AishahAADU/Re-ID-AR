@@ -1,4 +1,5 @@
 
+
 from __future__ import print_function, absolute_import
 import math
 import random
@@ -7,7 +8,7 @@ from scipy.io import loadmat
 import os.path as osp
 import numpy as np
 
-class Mars(object):
+class MARS(object):
     """
     MARS
     Reference:
@@ -21,7 +22,7 @@ class Mars(object):
         min_seq_len (int): tracklet with length shorter than this value will be discarded (default: 0).
     """
     
-    root  = "/MARS" 
+    root  =  "/home2/zwjx97/STE-NVAN-master/MARS" #"/MARS" 
     
     train_name_path = osp.join(root, 'info/train_name.txt')
     test_name_path = osp.join(root, 'info/test_name.txt')
@@ -29,13 +30,13 @@ class Mars(object):
     track_test_info_path = osp.join(root, 'info/tracks_test_info.mat')
     query_IDX_path = osp.join(root, 'info/query_IDX.mat')
 
-    def __init__(self, min_seq_len=0, ):
+    def __init__(self,train_file,test_file, min_seq_len=0):
         self._check_before_run()
         
        # prepare meta data
         
-        train_names ,train_actions= self._get_names("train_3_action.txt")
-        test_name,test_actions= self._get_names("test_3_action.txt")
+        train_names ,train_actions= self._get_names(train_file)
+        test_name,test_actions= self._get_names(test_file)
 
         track_train = loadmat(self.track_train_info_path)['track_train_info'] # numpy.ndarray (8298, 4)
         track_test = loadmat(self.track_test_info_path)['track_test_info'] # numpy.ndarray (12180, 4)
@@ -47,8 +48,8 @@ class Mars(object):
 
         train,train_action, num_train_tracklets, num_train_pids, num_train_imgs = self._process_data(train_names,train_actions, track_train,home_dir='bbox_train', relabel=True, min_seq_len=min_seq_len)
         video = self._process_train_data(train_names, track_train, home_dir='bbox_train', relabel=True, min_seq_len=min_seq_len)
-        query,query_action, num_query_tracklets, num_query_pids, num_query_imgs = self._process_data(test_name,test_actions, track_query,  home_dir='bbox_test', relabel=False, min_seq_len=min_seq_len)
-        gallery,gallery_action,num_gallery_tracklets, num_gallery_pids, num_gallery_imgs = self._process_data(test_name,test_actions, track_gallery, home_dir='bbox_test', relabel=False, min_seq_len=min_seq_len)
+        query,query_action, num_query_tracklets, num_query_pids, num_query_imgs = self._process_data_withoutclass0intest(test_name,test_actions, track_query,  home_dir='bbox_test', relabel=False, min_seq_len=min_seq_len)
+        gallery,gallery_action,num_gallery_tracklets, num_gallery_pids, num_gallery_imgs = self._process_data_withoutclass0intest(test_name,test_actions, track_gallery, home_dir='bbox_test', relabel=False, min_seq_len=min_seq_len)
         
         
         num_imgs_per_tracklet = num_train_imgs + num_query_imgs + num_gallery_imgs
@@ -147,13 +148,15 @@ class Mars(object):
             if len(img_paths) >= min_seq_len:
                 img_paths = tuple(img_paths)
                 
-                tracklets.append((img_paths, pid, camid,actions[0]))
+                tracklets.append((img_paths, pid, camid,(int(actions[0])-1)))
                 num_imgs_per_tracklet.append(len(img_paths))
                 
 
         num_tracklets = len(tracklets)
         
         return tracklets, actions, num_tracklets, num_pids, num_imgs_per_tracklet
+
+
     def _process_data_withoutclass0intest(self,names,action, meta_data, home_dir=None, relabel=False, min_seq_len=0):
              
          assert home_dir in ['bbox_train', 'bbox_test']
