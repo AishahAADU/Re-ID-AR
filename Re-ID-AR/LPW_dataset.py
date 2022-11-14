@@ -5,14 +5,14 @@ import os.path as osp
 class LPW(object):
     
     
-    def __init__(self, min_seq_len=0, ):
+    def __init__(self, min_seq_len=0,train_file,test_file, test_query):
         
        
         root = '/pep_256x128'
    
-        train_name_path =  'train_scene2_3_action.txt'      
-        Gallery_name_path =  'test_gallery_3_action.txt'
-        Query_name_path =  'test_query_3_action.txt'
+        train_name_path =  train_file    
+        Gallery_name_path =  test_file
+        Query_name_path =  test_query
 
         track_train_info_path =  'tracklet_for_train_scene2_8_action.txt'                 
         track_query_info_path =  'tracklet_test_query.txt'
